@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.micol.prj.notice.service.NoticeMapper">
+	<select id="noticeSelectList" resultType="co.micol.prj.notice.service.NoticeVO">
+		SELECT * FROM  NOTICE
+	</select>
+	<select id="noticeSelect" resultType="co.micol.prj.notice.service.NoticeVO">
+		SELECT * FROM  NOTICE WHERE NO = #{no}
+	</select>
+	<select id="noticeSearchList" resultType="co.micol.prj.notice.service.NoticeVO"
+		parameterType="String">
+		SELECT * FROM  NOTICE 
+		WHERE subject LIKE '%' || #{searchKey} ||'%'
+	</select>
+	<insert id="noticeInsert" parameterType="co.micol.prj.notice.service.NoticeVO">
+	<selectKey keyProperty="no" resultType="int" order="BEFORE">
+		SELECT MAX(NO+1) FROM NOTICE
+	</selectKey>
+		INSERT INTO NOTICE
+		VALUES(#{no},#{id},#{name},#{wdate},#{title},#{subject},#{fileName},#{pfileName})
+	</insert>
+	<update id="noticeUpdate" parameterType="co.micol.prj.notice.service.NoticeVO">
+		update notice
+		<set>
+			<if test="id != null">ID = #{id}</if>
+			<if test="name != null">NAME = #{name}</if>
+			<if test="wdate != null">WDATE = #{wdate}</if>
+			<if test="title != null">TITLE = #{title}</if>
+			<if test="subject != null">SUBJECT = #{subject}</if>
+			<if test="filename != null">FILENAME = #{fileName}</if>
+			<if test="pfilename != null">PFILENAME = #{pfileName}</if>
+		</set>
+		where no = #{no}
+	</update>
+	<delete id="noticeDelete" parameterType="co.micol.prj.notice.service.NoticeVO">
+		DELETE FROM NOTICE WHERE NO = #{no}
+	</delete>
+</mapper>
